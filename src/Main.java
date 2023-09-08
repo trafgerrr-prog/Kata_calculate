@@ -1,10 +1,11 @@
 import com.sun.source.tree.IfTree;
 
+import java.io.IOException;
 import java.util.Scanner;
 import java.util.TreeMap;
 
 public class Main {
-    public static String calc(String input){
+    public static String calc(String input) throws IOException {
         Converter converter = new Converter();
 
         String[] actions = {"+", "-", "/", "*"};
@@ -21,12 +22,12 @@ public class Main {
         }
 
         if (aInd == -1) {
-            return "throws Exception";
+            throw new IOException();
         }
 
         String[] nums = input.split(shActions[aInd]);
         if (nums.length > 2) {
-            return "throws Exception";
+            throw new IOException();
         }
 
         if (converter.isRom(nums[0]) == converter.isRom(nums[1])){
@@ -50,7 +51,7 @@ public class Main {
                             return Integer.toString(a.mul(b));
                     }
                 } else {
-                    return "throws Exception";
+                    throw new IOException();
                 }
             } else{
                 numbers a = new numbers();
@@ -67,7 +68,7 @@ public class Main {
                             if (a.sub(b) > 0){
                                 return converter.converterToInt(a.sub(b));
                             } else {
-                                return "throws Exception";
+                                throw new IOException();
                             }
                         case "/":
                             return converter.converterToInt(a.div(b));
@@ -75,15 +76,15 @@ public class Main {
                             return converter.converterToInt(a.mul(b));
                     }
                 } else {
-                    return "throws Exception";
+                    throw new IOException();
                 }
             }
 
         } else {
-            return "throws Exception";
+            throw new IOException();
         }
 
-        return "throws Exception";
+        throw new IOException();
     }
 
     public static void main(String[] args) {
@@ -91,7 +92,13 @@ public class Main {
         String str = scn.nextLine();
         str = str.replaceAll("\\s", "");
 
-        System.out.println(calc(str));
+
+        try {
+            String output = calc(str);
+            System.out.println(output);
+        } catch (IOException e) {
+            System.out.println("throw Exception");
+        }
 
     }
 }
@@ -157,7 +164,7 @@ class Converter{
 
         do{
             arKey = mapArab.floorKey(num);
-            rom +=mapArab.get(arKey);
+            rom += mapArab.get(arKey);
             num -= arKey;
         } while (num != 0);
 
